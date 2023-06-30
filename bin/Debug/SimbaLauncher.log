@@ -1,0 +1,43 @@
+[LOG] Please wait while we check for updates... [6/30/2023 10:39:42 AM]
+[LOG] Thank you for using Simba Dev! Launcher made by @conspiracyy on Discord, SSL and backend by DRQSuperior! [6/30/2023 10:39:45 AM]
+[LOG] Please Login to continue. [6/30/2023 10:39:45 AM]
+[LOG] RestRequest: RestSharp.RestRequest [6/30/2023 10:39:45 AM]
+[LOG] DeviceCodeToken: {"access_token":"363a0b3bdfe6408dab00a47c77f623b8","expires_in":14400,"expires_at":"2023-06-30T19:39:45.962Z","token_type":"bearer","client_id":"98f7e42c2e3a4f86a74eb43fbb41ed39","internal_client":true,"client_service":"prod-fn","product_id":"prod-fn","application_id":"fghi4567FNFBKFz3E4TROb0bmPS8h1GW"} [6/30/2023 10:39:45 AM]
+[LOG] Token: {
+  "access_token": "363a0b3bdfe6408dab00a47c77f623b8",
+  "expires_in": 14400,
+  "expires_at": "2023-06-30T19:39:45.962Z",
+  "token_type": "bearer",
+  "client_id": "98f7e42c2e3a4f86a74eb43fbb41ed39",
+  "internal_client": true,
+  "client_service": "prod-fn",
+  "product_id": "prod-fn",
+  "application_id": "fghi4567FNFBKFz3E4TROb0bmPS8h1GW"
+} [6/30/2023 10:39:45 AM]
+[LOG] RestRequest: RestSharp.RestRequest [6/30/2023 10:39:45 AM]
+[LOG] Started verification process. Please check your browser. [6/30/2023 10:39:46 AM]
+[LOG] RestRequest: RestSharp.RestRequest [6/30/2023 10:39:46 AM]
+[LOG] Waiting for user to authorize the app. [6/30/2023 10:39:46 AM]
+[LOG] RestRequest: RestSharp.RestRequest [6/30/2023 10:39:46 AM]
+[LOG] Waiting for user to authorize the app. [6/30/2023 10:39:47 AM]
+[LOG] RestRequest: RestSharp.RestRequest [6/30/2023 10:39:47 AM]
+[LOG] Waiting for user to authorize the app. [6/30/2023 10:39:47 AM]
+[LOG] RestRequest: RestSharp.RestRequest [6/30/2023 10:39:47 AM]
+[LOG] Waiting for user to authorize the app. [6/30/2023 10:39:48 AM]
+[LOG] RestRequest: RestSharp.RestRequest [6/30/2023 10:39:48 AM]
+[LOG] Waiting for user to authorize the app. [6/30/2023 10:39:49 AM]
+[LOG] RestRequest: RestSharp.RestRequest [6/30/2023 10:39:49 AM]
+[LOG] AccountInfo: 509106b7490249ca93ad68bd85dff24d:DRQSuperiorツ [6/30/2023 10:39:49 AM]
+[LOG] AccessToken: a9cfc51e5766455d9948754aac232c9e [6/30/2023 10:39:49 AM]
+[LOG] RestRequest: RestSharp.RestRequest [6/30/2023 10:39:49 AM]
+[LOG] Exchange: {"expiresInSeconds":299,"code":"2b8ea4aa04f94aa6b4654eb1c7e3f4f4","creatingClientId":"98f7e42c2e3a4f86a74eb43fbb41ed39"} [6/30/2023 10:39:49 AM]
+[LOG] Exchange: {
+  "expiresInSeconds": 299,
+  "code": "2b8ea4aa04f94aa6b4654eb1c7e3f4f4",
+  "creatingClientId": "98f7e42c2e3a4f86a74eb43fbb41ed39"
+} [6/30/2023 10:39:49 AM]
+[LOG] Logging in... [6/30/2023 10:39:49 AM]
+[LOG] Welcome! DRQSuperiorツ Enjoy Simba Dev! :D [6/30/2023 10:39:49 AM]
+[LOG] Thanks for using Simba Dev :) [6/30/2023 10:40:54 AM]
+[LOG] Launching Simba Dev! Enjoy :D [6/30/2023 10:40:54 AM]
+[LOG] Launching Simba Dev! Enjoy :D [6/30/2023 10:40:54 AM]

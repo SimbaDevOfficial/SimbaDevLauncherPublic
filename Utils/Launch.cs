@@ -5,10 +5,10 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using Newtonsoft.Json.Linq;
-using SimbaDevPublicLauncher.utils;
+using SimbaDevPublicLauncher.Utils;
 using Win32;
 
-namespace SimbaDevPublicLauncher.utils
+namespace SimbaDevPublicLauncher.Utils
 {
     internal class Launch
     {
@@ -98,18 +98,16 @@ namespace SimbaDevPublicLauncher.utils
                     RedirectStandardOutput = false,
                     CreateNoWindow = true,
                     Arguments = "-AUTH_LOGIN=unused AUTH_TYPE=exchangecode -epicapp=Fortnite -epicenv=Prod -nobe -skippatchcheck -fromfl=eac -epicportal -epiclocale=en-us -AUTH_PASSWORD=" + exchange
-        }
+           }
             };
             Fortnite.Start();
 
-            // Start the Fortnite launcher process and suspend its threads
             string FNL = Path.Combine(path, "FortniteGame\\Binaries\\Win64\\FortniteLauncher.exe");
             Process FNLP = Process.Start(FNL);
             SuspendProcessThreads(FNLP);
 
-            // Start the Fortnite EAC process and suspend its threads
             string EAC = Path.Combine(path, "FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping_EAC.exe");
-            Process EACP = Process.Start(EAC, "EAC ARGS");
+            Process EACP = Process.Start(EAC, "-epiclocale=en -noeac -nobe -fromfl=eac -fltoken=3db3ba5dcbd2e16703f3978d -caldera=eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiYmU5ZGE1YzJmYmVhNDQwN2IyZjQwZWJhYWQ4NTlhZDQiLCJnZW5lcmF0ZWQiOjE2Mzg3MTcyNzgsImNhbGRlcmFHdWlkIjoiMzgxMGI4NjMtMmE2NS00NDU3LTliNTgtNGRhYjNiNDgyYTg2IiwiYWNQcm92aWRlciI6IkVhc3lBbnRpQ2hlYXQiLCJub3RlcyI6IiIsImZhbGxiYWNrIjpmYWxzZX0.VAWQB67RTxhiWOxx7DBjnzDnXyyEnX7OljJm-j2d88G_WgwQ9wrE6lwMEHZHjBd1ISJdUO1UVUqkfLdU5nofBQ");
             SuspendProcessThreads(EACP);
 
             Thread.Sleep(2000);
@@ -145,7 +143,7 @@ namespace SimbaDevPublicLauncher.utils
             catch
             {
                 Console.WriteLine("Fortnite Has unexpectedly crashed. (Probably)");
-                // Close the Fortnite launcher and EAC processes
+
                 FNLP.Close();
                 EACP.Close();
                 Fortnite.Close();
@@ -189,7 +187,7 @@ namespace SimbaDevPublicLauncher.utils
 
         private static void ShowFileMissingMessage(string fileName)
         {
-            Console.WriteLine(fileName + " does not exist!");
+            Logging.Error("Could not find " + fileName + "!");
         }
 
         private static void SuspendProcessThreads(Process process)

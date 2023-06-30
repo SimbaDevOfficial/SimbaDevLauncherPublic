@@ -3,10 +3,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SimbaDevPublicLauncher.utils;
+using SimbaDevPublicLauncher.Utils;
 
 namespace SimbaDevPublicLauncher
 {
@@ -23,57 +24,127 @@ namespace SimbaDevPublicLauncher
         private static string Response { get; set; }
         private static string[] Args { get; set; }
 
+        static string currentVersion = "3.0";
+
+        static string lastOpenedDiscordTimeFile = "other.simba";
+
+        static void CheckForUpdates()
+        {
+            Logging.Log("Please wait while we check for updates...");
+
+            string apiURL = "https://raw.githubusercontent.com/DRQSuperior/simba-api/main/update.json";
+
+            try
+            {
+                WebClient client = new WebClient();
+                string apiJson = client.DownloadString(apiURL);
+
+                JObject apiData = JObject.Parse(apiJson);
+                string latestVersion = (string)apiData["version"];
+
+                if (latestVersion != currentVersion)
+                {
+                    string updateURL = (string)apiData["update_url"];
+                    string input = Logging.Input("Launcher is outdated. Would you like to open the update download? (Y/N)");
+                    if (input.ToLower() == "y")
+                    {
+                        System.Diagnostics.Process.Start(updateURL);
+                    } else
+                    {
+                        Logging.Log("Please update your launcher to continue.");
+                        Console.Read();
+                        Environment.Exit(0);
+                    }
+                }
+
+                bool downtime = (bool)apiData["downtime"];
+                if (downtime)
+                {
+                    string downtimeReason = (string)apiData["downtime_reason"];
+                    Logging.Error("Simba is currently down for maintenance. Reason: " + downtimeReason);
+                    return;
+                }
+
+                string discordURL = (string)apiData["discord_url"];
+                if (!string.IsNullOrEmpty(discordURL))
+                {
+                    if (ShouldOpenDiscord())
+                    {
+                        System.Diagnostics.Process.Start(discordURL);
+
+                        UpdateLastOpenedDiscordTime();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Error("Error checking for updates: " + ex.Message);
+                Console.ReadKey();
+                Environment.Exit(0);
+            }
+
+            Thread.Sleep(3000);
+            Console.Clear();
+        }
+
+        static bool ShouldOpenDiscord()
+        {
+            if (File.Exists(lastOpenedDiscordTimeFile))
+            {
+                string lastOpenedTime = File.ReadAllText(lastOpenedDiscordTimeFile);
+                DateTime lastOpenedDateTime;
+                if (DateTime.TryParse(lastOpenedTime, out lastOpenedDateTime))
+                {
+                    TimeSpan timeSinceLastOpened = DateTime.Now - lastOpenedDateTime;
+                    return timeSinceLastOpened.TotalHours >= 1; 
+                }
+            }
+
+            return true; 
+        }
+
+        static void UpdateLastOpenedDiscordTime()
+        {
+            // Update the last opened Discord time to the current time
+            File.WriteAllText(lastOpenedDiscordTimeFile, DateTime.Now.ToString());
+        }
+
         public static async Task<string> GetAuth()
         {
+            CheckForUpdates();
             Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("_______________________________________________");
             Console.WriteLine(@"
-  ___ _       _            ___          
- / __(_)_ __ | |__  __ _  |   \ _____ __
- \__ \ | '  \| '_ \/ _` | | |) / -_) V /
- |___/_|_|_|_|_.__/\__,_| |___/\___|\_/ 
+     ___ _       _            ___          
+    / __(_)_ __ | |__  __ _  |   \ _____ __
+    \__ \ | '  \| '_ \/ _` | | |) / -_) V /
+    |___/_|_|_|_|_.__/\__,_| |___/\___|\_/ 
 ");
-            Console.WriteLine("_______________________________________________ \n\n");
+            Console.WriteLine("_______________________________________________\n\n");
 
             Logging.Log("Thank you for using Simba Dev! Launcher made by @conspiracyy on Discord, SSL and backend by DRQSuperior!");
-            Logging.Log("Please go to the following link and provide the auth code after code=, or paste the entire response! https://rebrand.ly/authcode\n\n");
-            Process.Start(new ProcessStartInfo("https://rebrand.ly/authcode") { UseShellExecute = true });
+            Logging.Log("Please Login to continue.");
 
-            var code = Logging.Input("Auth Code");
-
-            if (string.IsNullOrEmpty(code))
+            string devicecode = Auth.Auth.GetDeviceCode(Auth.Auth.GetDevicecodetoken());
+            string[] array = devicecode.Split(new char[] { ',' }, 2);
+            if (devicecode.Contains("error"))
             {
-                return "invalidauth";
+                Logging.Error("Error: " + devicecode);
+                return "Error: " + devicecode;
             }
+            string token = array[0];
 
-            if (code.Length == 32)
-            {
-                var exchange = await Auth.GetExchange(code);
+            string exchange = Auth.Auth.GetExchange(token);
 
-                if (exchange == "invalidauth")
-                {
-                    return "invalidauth";
-                }
-            }
+            Logging.Log("Logging in...");
 
-            Regex regex = new Regex(@"([a-zA-Z0-9]{32})"); // 32 alphanumeric characters
-            Match match = regex.Match(code);
+            Logging.Log("Welcome! " + Auth.AccountInfo.DisplayName.ToString() + " Enjoy Simba Dev! :D");
 
-            if (match.Success)
-            {
-                var authCode = match.Groups[1].Value;
-                var exchange = await Auth.GetExchange(authCode);
+            Launch.LaunchDev(FortnitePath, exchange);
 
-                if (exchange == "invalidauth")
-                {
-                    return "invalidauth";
-                }
-            }
-            else
-            {
-                return "invalidauth";
-            }
+            Logging.Log("Launching Simba Dev! Enjoy :D");
 
-            return "bruh";
+            return "Success";
         }
 
         private static void Main(string[] args)
