@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SimbaDevPublicLauncher.Utils;
 
 namespace SimbaDevPublicLauncher.Auth
 {
@@ -35,13 +34,13 @@ namespace SimbaDevPublicLauncher.Auth
             try
             {
                 var response = restClient.Execute(restRequest);
-                Logging.LogToFile("DeviceCodeToken: " + response.Content);
+                Logging.Logging.LogToFile("DeviceCodeToken: " + response.Content);
                 return ParseToken(response.Content);
             }
             catch
             {
-                Logging.Error("Oops! It looks like there's a problem with your internet connection. Please check it and try again.");
-                Logging.LogToFile("Oops! It looks like there's a problem with your internet connection. Please check it and try again.");
+                Logging.Logging.Error("Oops! It looks like there's a problem with your internet connection. Please check it and try again.");
+                Logging.Logging.LogToFile("Oops! It looks like there's a problem with your internet connection. Please check it and try again.");
                 Process.GetCurrentProcess().Kill();
                 return "error";
             }
@@ -59,10 +58,10 @@ namespace SimbaDevPublicLauncher.Auth
             string verificationUriComplete = json.Value<string>("verification_uri_complete");
 
             Process.Start(verificationUriComplete);
-            Logging.LogToFile("Started verification process. Please check your browser.");
+            Logging.Logging.LogToFile("Started verification process. Please check your browser.");
 
             string accessToken = WaitForAccessToken(deviceCode);
-            Logging.LogToFile("AccessToken: " + accessToken);
+            Logging.Logging.LogToFile("AccessToken: " + accessToken);
             return accessToken;
         }
 
@@ -72,7 +71,7 @@ namespace SimbaDevPublicLauncher.Auth
             restRequest.AddHeader("Authorization", "bearer " + token);
 
             var response = restClient.Execute(restRequest);
-            Logging.LogToFile("Exchange: " + response.Content);
+            Logging.Logging.LogToFile("Exchange: " + response.Content);
             return ParseExchange(response.Content);
         }
 
@@ -80,21 +79,21 @@ namespace SimbaDevPublicLauncher.Auth
         {
             RestRequest restRequest = new RestRequest(resource);
             restRequest.Method = method;
-            Logging.LogToFile("RestRequest: " + restRequest);
+            Logging.Logging.LogToFile("RestRequest: " + restRequest);
             return restRequest;
         }
 
         private static string ParseToken(string content)
         {
             var token = JObject.Parse(content);
-            Logging.LogToFile("Token: " + token);
+            Logging.Logging.LogToFile("Token: " + token);
             return token.Value<string>("access_token");
         }
 
         private static string ParseExchange(string content)
         {
             var exchange = JObject.Parse(content);
-            Logging.LogToFile("Exchange: " + exchange);
+            Logging.Logging.LogToFile("Exchange: " + exchange);
             return exchange.Value<string>("code");
         }
 
@@ -113,13 +112,13 @@ namespace SimbaDevPublicLauncher.Auth
                 if (json.ContainsKey("error"))
                 {
                     Thread.Sleep(200);
-                    Logging.LogToFile("Waiting for user to authorize the app.");
+                    Logging.Logging.LogToFile("Waiting for user to authorize the app.");
                 }
                 else
                 {
                     AccountInfo.AccountId = json.Value<string>("account_id");
                     AccountInfo.DisplayName = json.Value<string>("displayName");
-                    Logging.LogToFile("AccountInfo: " + AccountInfo.AccountId + ":" + AccountInfo.DisplayName);
+                    Logging.Logging.LogToFile("AccountInfo: " + AccountInfo.AccountId + ":" + AccountInfo.DisplayName);
                     return json.Value<string>("access_token");
                 }
             }
