@@ -4,7 +4,7 @@
 SimbaDevPublicLauncher is an open-source launcher developed by @conspiracyy. It is designed to provide a convenient way to launch Simba Dev and improve user experience.
 
 🔗 Discord:
-Join our Discord server for support, updates, and community interactions: [Discord Server Link](https://discord.gg/simbadev)
+Join our Discord server for support, updates, and community interactions: [Discord Server Link](https://discord.gg/simba)
 
 📝 Features:
 - Auth Code Authentication: Securely authenticate your Simba Dev launcher with an auth code.
